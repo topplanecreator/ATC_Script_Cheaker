@@ -72,9 +72,7 @@ License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-
-
-
+Compiling
 Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -85,16 +83,16 @@ pyinstaller (Used for packaging the executable)
 
 Steps to Compile the Application
 
-1. Navigate to Your Project Directory
+1 Navigate to Your Project Directory
     cd Downloads/ATC_Script_Cheaker/
 
-2. Run PyInstaller to Create an Executable
-        pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
+2 Run PyInstaller to Create an Executable
+    pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
 
-    --onefile: Packages everything into a single executable file.
-    --windowed: Hides the terminal (useful for GUI applications; remove for CLI tools).
-    --name FlightPlanGenerator: Specifies the output name
-    The generated files will be in the dist/ directory.
+--onefile: Packages everything into a single executable file.
+--windowed: Hides the terminal (useful for GUI applications; remove for CLI tools).
+--name FlightPlanGenerator: Specifies the output name
+The generated files will be in the dist/ directory.
 
-3. (Optional) Add an App Icon
-    Convert your icon to .icns format using:
+3 (Optional) Add an App Icon
+Convert your icon to .icns format using:

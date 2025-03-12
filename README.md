@@ -89,12 +89,12 @@ Steps to Compile the Application
     cd Downloads/ATC_Script_Cheaker/
 
 2. Run PyInstaller to Create an Executable
-    pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
+        pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
 
---onefile: Packages everything into a single executable file.
---windowed: Hides the terminal (useful for GUI applications; remove for CLI tools).
---name FlightPlanGenerator: Specifies the output name
-The generated files will be in the dist/ directory.
+    --onefile: Packages everything into a single executable file.
+    --windowed: Hides the terminal (useful for GUI applications; remove for CLI tools).
+    --name FlightPlanGenerator: Specifies the output name
+    The generated files will be in the dist/ directory.
 
 3. (Optional) Add an App Icon
-Convert your icon to .icns format using:
+    Convert your icon to .icns format using:

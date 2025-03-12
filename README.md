@@ -72,32 +72,80 @@ License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-Compiling
-Prerequisites
 
-Before you begin, ensure you have the following installed:
-Python 3 (Preferably installed via Homebrew)
 
-    brew install python
 
-pyinstaller (Used for packaging the executable)
+# Flight Plan Generator - macOS Compilation Guide
 
-    pip install pyinstaller
+This guide explains how to compile the Python-based Flight Plan Generator into a standalone macOS application.
 
-Steps to Compile the Application
+## Prerequisites
+Ensure you have the following installed:
 
-1 Navigate to Your Project Directory
+- **Python 3** (Recommended installation via [Homebrew](https://brew.sh/))  
+  ```sh
+  brew install python
+  ```
+- **`pyinstaller`** (For packaging the executable)  
+  ```sh
+  pip install pyinstaller
+  ```
+- **Project Dependencies** (Install from `requirements.txt`)  
+  ```sh
+  pip install -r requirements.txt
+  ```
 
-    cd Downloads/ATC_Script_Cheaker/
+## Compilation Steps
 
-2 Run PyInstaller to Create an Executable
+1. **Navigate to Your Project Directory**  
+   ```sh
+   cd /path/to/your/project
+   ```
 
-    pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
+2. **Run PyInstaller to Create an Executable**  
+   ```sh
+   pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
+   ```
+   - `--onefile`: Packages everything into a single executable file.  
+   - `--windowed`: Hides the terminal (useful for GUI applications; remove for CLI tools).  
+   - `--name FlightPlanGenerator`: Specifies the output name.  
+   
+   The generated files will be in the `dist/` directory.
 
---onefile: Packages everything into a single executable file.
---windowed: Hides the terminal (useful for GUI applications; remove for CLI tools).
---name FlightPlanGenerator: Specifies the output name
-The generated files will be in the dist/ directory.
+3. **(Optional) Add an App Icon**  
+   - Convert your icon to `.icns` format using:  
+     ```sh
+     sips -s format icns my_icon.png --out icon.icns
+     ```
+   - Modify the PyInstaller command:
+     ```sh
+     pyinstaller --onefile --windowed --name FlightPlanGenerator --icon=icon.icns main.py
+     ```
 
-3 (Optional) Add an App Icon
+4. **Code Sign the Application (If Needed)**  
+   - For macOS Gatekeeper compliance, sign your app:
+     ```sh
+     codesign --force --deep --sign - dist/FlightPlanGenerator.app
+     ```
+   - If distributing outside the App Store, notarization with Apple may be required.
+
+5. **Test the Executable**  
+   ```sh
+   ./dist/FlightPlanGenerator
+   ```
+
+6. **Package for Distribution**  
+   - Create a `.dmg` installer:
+     ```sh
+     hdiutil create -volname "FlightPlanGenerator" -srcfolder "dist/FlightPlanGenerator.app" -ov -format UDZO FlightPlanGenerator.dmg
+     ```
+
+## Troubleshooting
+- If the app doesn't run due to security restrictions, allow it in **System Preferences > Security & Privacy > Open Anyway**.
+- If you encounter missing dependencies, check your imports and `requirements.txt`.
+
+---
+
+For additional issues, check the PyInstaller [documentation](https://pyinstaller.org/).
+
 Convert your icon to .icns format using:

@@ -71,3 +71,30 @@ Create a new Pull Request
 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+
+
+Prerequisites
+
+Before you begin, ensure you have the following installed:
+Python 3 (Preferably installed via Homebrew)
+    brew install python
+pyinstaller (Used for packaging the executable)
+    pip install pyinstaller
+
+Steps to Compile the Application
+
+1. Navigate to Your Project Directory
+    cd Downloads/ATC_Script_Cheaker/
+
+2. Run PyInstaller to Create an Executable
+    pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
+
+--onefile: Packages everything into a single executable file.
+--windowed: Hides the terminal (useful for GUI applications; remove for CLI tools).
+--name FlightPlanGenerator: Specifies the output name
+The generated files will be in the dist/ directory.
+
+3. (Optional) Add an App Icon
+Convert your icon to .icns format using:

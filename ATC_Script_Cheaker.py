@@ -5,112 +5,21 @@ import math
 import os
 import sys
 import pandas as pd
+import csv
 
-AIRLINE_CODES = {
-    "AAL": "American Airlines",
-    "ACA": "Air Canada",
-    "DLH": "Lufthansa",
-    "UAE": "Emirates",
-    "BAW": "British Airways",
-    "QFA": "Qantas",
-    "SIA": "Singapore Airlines",
-    "CPA": "Cathay Pacific",
-    "JAL": "Japan Airlines",
-    "AFR": "Air France",
-    "KLM": "Royal Dutch Airlines",
-    "THY": "Turkish Airlines",
-    "DAL": "Delta Air Lines",
-    "UAL": "United Airlines",
-    "SWA": "Southwest Airlines",
-    "RYR": "Ryanair",
-    "CSN": "China Southern Airlines",
-    "CES": "China Eastern Airlines",
-    "AFL": "Aeroflot",
-    "ETD": "Etihad Airways",
-    "ASH": "Air Shuttle",
-    "SAA": "South African Airways",
-    "TAM": "TAM Airlines",
-    "VIR": "Virgin Atlantic",
-    "QTR": "Qatar Airways",
-    "AIB": "Alitalia",
-    "LAN": "LAN Airlines",
-    "AZA": "Alaska Airlines",
-    "MEX": "Aeromexico",
-    "ANA": "All Nippon Airways",
-    "IAG": "International Airlines Group",
-    "HKG": "Hong Kong Airlines",
-    "JBU": "JetBlue Airways",
-    "SJJ": "Sichuan Airlines",
-    "EZY": "easyJet",
-    "WZZ": "Wizz Air",
-    "GFA": "GoAir",
-    "EGL": "Eagle Air",
-    "GTI": "Golden Myanmar Airlines",
-    "GDR": "Grand China Air",
-    "UPS": "UPS",
-    "FDX": "FedEx",
-    "DHL": "DHL",
-    "LTL": "LTL",
-    "TSA": "TSA",
-    "SVR": "Silver Airways",
-    "RGO": "Royal Mail Group",
-    "GXO": "GXO Logistics",
-    "ONR": "OnTrac",
-    "CND": "Concordia Express",
-    "GHT": "Global Haulage Transport",
-    "XPO": "XPO Logistics",
-    "OBX": "Obex",
-    "DLX": "Deluxe Logisti",
-    "SQC": "Singapore Airlines Cargo",
-    "SNA": "Snaigė",
-    "JET": "Jet Airways",
-    "EFL": "EgyptAir Cargo",
-    "PAL": "Philippine Airlines",
-    "AUA": "Aruba Airlines",
-    "BKN": "Balkan Air",
-    "NKS": "Spirit Airlines",
-    "CKS": "Czech Airlines",
-    "QKF": "Qatar Airways Cargo",
-    "PKR": "Pakistan International Airlines",
-    "KQA": "Kenya Airways",
-    "BBA": "Bulgaria Air",
-    "MNG": "MNG Airlines",
-    "MAH": "Air Madagascar",
-    "BTI": "Batik Air",
-    "SZX": "Shenzhen Airlines",
-    "GAI": "Garuda Indonesia",
-    "FJI": "Fiji Airways",
-    "HPL": "Hawaiian Airlines",
-    "SHR": "Shanghai Airlines",
-    "MAA": "Malaysia Airlines",
-    "STB": "Sibiryak Airlines",
-    "SLT": "Southeast Airlines",
-    "ZAZ": "Azores Airlines",
-    "ACV": "Air Calédonie",
-    "FUA": "Fuji Dream Airlines",
-    "PEK": "Air China",
-    "HWA": "Hwa Hsia Airlines",
-    "AIR": "Air India Express",
-    "PEG": "Peguero Airlines",
-    "CNC": "China National Airlines",
-    "HAJ": "Hainan Airlines",
-    "AWY": "Airways New Zealand",
-    "HXA": "Hunan Airlines",
-    "RSN": "Riviera Airlines",
-    "SVA": "Saudia Airlines",
-    "FRU": "Flydubai",
-    "DOH": "Doha Air",
-    "SSE": "Sun Express",
-    "AFT": "Africa Air",
-    "GRU": "Gulfstream Airlines",
-    "LSE": "Laos Air",
-    "SCO": "Scandinavian Airlines",
-    "NDA": "Norwegian Air",
-    "AUR": "Aurora Airlines",
-    "LQA": "Lao Airlines",
-    "AAR": "AeroMexico",
-    "CDM": "Cargo Dynamics"
-}
+
+CSV_FILENAME = "airlines.csv"
+def load_airline_codes(csv_filename):
+    airline_codes = {}
+    with open(csv_filename, mode='r', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if len(row) == 2:  # Ensure there are exactly two columns
+                code, name = row
+                airline_codes[code.strip()] = name.strip()
+    return airline_codes
+
+AIRLINE_CODES = load_airline_codes(CSV_FILENAME)
 
 def load_airports(csv_path):
     return pd.read_csv(csv_path)
@@ -134,8 +43,6 @@ def calculate_direction(lat1, lon1, lat2, lon2):
     return round(bearing, 2)
 
 def name_heading(code1, code2):
-    import os
-    import pandas as pd
 
     # Get the correct path (works for bundled .exe or normal script)
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -200,6 +107,7 @@ def to_uppercase(event):
     event.widget.insert(0, current_text.upper())
 
 
+
 def update_callsign_label(event):
     callsign = callsign_entry.get().upper()
     if len(callsign) >= 3 and callsign[:3] in AIRLINE_CODES:
@@ -207,6 +115,7 @@ def update_callsign_label(event):
         callsign_label.config(text=f"{airline_name} {callsign[3:]}")
     else:
         callsign_label.config(text="")
+
 
 def get_valid_input(prompt, valid_values=None, input_type=str):
     while True:
@@ -309,7 +218,7 @@ def generate_flight_plan(event=None):
     sub2 = "FL " if final_altitude >= 200 else ""
     Cleared = "cleared out of the class bravo," if fr == "VFR" else ""
     
-    output_label.config(text=f'{callsign} Memphis Ground,{Cleared} cleared to {airport_info2}, via {route}, \n'
+    output_label.config(text=f'{callsign}, {Cleared} cleared to {airport_info2}, via {route}, \n'
                             f'then as filed, maintain 5000, expect {sub2}{final_altitude}{sub1} 1-0 minutes after departure, \n'
                             f'departure frequency {frequency}, squawk {squawk}')
 
@@ -323,7 +232,8 @@ def on_enter(event):
 # Tkinter Window Setup (same as before)
 root = tk.Tk()
 root.title("Flight Plan Generator")
-
+default_font = ("Arial", 12)
+root.option_add("*Font", default_font)
 # Allow the window to be resizable in both directions
 root.resizable(True, True)  # (width, height) resizable
 

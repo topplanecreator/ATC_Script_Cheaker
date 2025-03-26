@@ -281,7 +281,7 @@ destination_entry = tk.Entry(root)
 destination_entry.grid(row=3, column=1, sticky="ew", padx=10, pady=5)
 destination_entry.bind("<KeyRelease>", to_uppercase)
 
-tk.Label(root, text="Route:").grid(row=4, column=0, sticky="w", padx=10, pady=5)
+tk.Label(root, text="Route:").grid(row=4, column=0, sticky="w", padx=10, pady=5) ### this needs to be changed to a csv if posible
 routes = [
     "AUTMN SIX (LUVEC)",
     "AZONE SEVEN (PITEW)", 

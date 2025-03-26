@@ -217,7 +217,7 @@ def generate_flight_plan(event=None):
     sub1 = "" if final_altitude >= 200 else "00"
     sub2 = "FL " if final_altitude >= 200 else ""
     Cleared = "cleared out of the class bravo," if fr == "VFR" else ""
-    
+    #************************************************************* Should be ,via {departure} departure, {fix} Transition, then as filed...
     output_label.config(text=f'{callsign}, {Cleared} cleared to {airport_info2}, via {route}, \n'
                             f'then as filed, maintain 5000, expect {sub2}{final_altitude}{sub1} 1-0 minutes after departure, \n'
                             f'departure frequency {frequency}, squawk {squawk}')

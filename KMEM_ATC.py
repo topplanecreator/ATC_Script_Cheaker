@@ -7,6 +7,7 @@ import csv  # Import csv module for reading CSV files
 import webbrowser #Import webbrowser to open links.
 import json #Import json to read and write json files.
 
+
 # Define the filenames for the CSV files and JSON file
 CSV_FILENAME = "airlines.csv"
 AIRPORTS_CSV = "airports.csv"

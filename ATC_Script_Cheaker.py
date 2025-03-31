@@ -5,6 +5,7 @@ import pandas as pd
 import math
 import csv
 import webbrowser
+import json  # Import the json module for saving/loading notes
 
 # --- Constants and Data Loading ---
 
@@ -12,6 +13,7 @@ import webbrowser
 CSV_FILENAME = "airlines.csv"  # Contains airline codes and names
 AIRPORTS_CSV = "airports.csv"  # Contains airport information
 ROUTES_CSV = "routes.csv"  # Contains flight route information
+NOTES_FILENAME = "user_notes.json"  # File to save notes
 
 def load_airline_codes(csv_filename):
     """Loads airline codes and names from a CSV file."""
@@ -142,7 +144,7 @@ def update_callsign_label(callsign_entry, callsign_label):
     else:
         callsign_label.config(text="")
 
-def generate_flight_plan(frequency_entry, callsign_entry, route_var, departure_entry, destination_entry, altitude_entry, squawk_entry, flight_plan_label, direction_label, route_night_label, heading_var, aircraft_type_var, notes_text_box):
+def generate_flight_plan(frequency_entry, callsign_entry, route_var, departure_entry, destination_entry, altitude_entry, squawk_entry, flight_plan_label, direction_label, route_night_label, heading_var, aircraft_type_var, notes_text_box, system_notes_text_box):
     """Generates and displays a flight plan based on user inputs."""
     frequency = frequency_entry.get() or '125.8'
     callsign = callsign_entry.get().upper()
@@ -203,33 +205,60 @@ def generate_flight_plan(frequency_entry, callsign_entry, route_var, departure_e
         notes.append(f"Night Note: {route_name} is a 0200-0600 only SID.")
     notes.append(f"Direction: {flight_direction}")
 
+    system_notes_text_box.delete(1.0, tk.END) # Clear system notes every time.
     if notes:
-        notes_text_box.config(fg="red")
-        notes_text_box.delete(1.0, tk.END)
-        notes_text_box.insert(tk.END, "\n".join(notes))
+        system_notes_text_box.config(fg="red")
+        system_notes_text_box.insert(tk.END, "\n".join(notes))
     else:
-        notes_text_box.config(fg="black")
-        notes_text_box.delete(1.0, tk.END)
-        
+        system_notes_text_box.config(fg="black")
+
 current_text_color = "black"  # Default color
+
+tag_colors_dict = {}  # Dictionary to store tag colors
 
 def change_text_color(color):
     """Changes the color of the selected text."""
     global current_text_color
     current_text_color = color
     notes_text_box.tag_configure(color, foreground=color)
+    tag_colors_dict[color] = color  # Store the color name
     try:
         notes_text_box.tag_add(color, "sel.first", "sel.last")
     except tk.TclError:  # Handle no selection
         pass
 
-def on_text_insert(event):
-  notes_text_box.tag_add(current_text_color, "insert-1c", "insert")
+def save_notes(notes, tag_ranges, tag_colors):
+    """Saves the user's notes, tag ranges, and tag colors to a JSON file."""
+    serializable_tag_ranges = {}
+    for tag, ranges in tag_ranges.items():
+        serializable_ranges = []
+        for r in ranges:
+            if isinstance(r, str):
+                serializable_ranges.append(r)
+        serializable_tag_ranges[tag] = serializable_tag_ranges
+    try:
+        with open(NOTES_FILENAME, 'w') as file:
+            json.dump({"notes": notes, "tag_ranges": serializable_tag_ranges, "tag_colors": tag_colors}, file)
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to save notes: {e}")
+
+def load_notes():
+    """Loads the user's notes, tag ranges, and tag colors from a JSON file."""
+    try:
+        with open(NOTES_FILENAME, 'r') as file:
+            data = json.load(file)
+            return data["notes"], data["tag_ranges"], data["tag_colors"]
+    except FileNotFoundError:
+        return "", {}, {}  # Return empty string and empty dicts if file doesn't exist
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to load notes: {e}")
+        return "", {}, {}
+
 # --- GUI Setup ---
 
 root = tk.Tk()
 root.title("Flight Plan Generator")
-root.geometry("850x700")
+root.geometry("850x1000")
 root.resizable(True, True)
 
 top_frame = ttk.Frame(root)
@@ -307,7 +336,7 @@ ttk.Label(frame1, textvariable=heading_var).grid(row=12, column=0, columnspan=2,
 direction_label = tk.Label(frame1, text="") #add direction label
 direction_label.grid(row=13, column=0, columnspan=2, sticky="ew", padx=0, pady=0)
 
-ttk.Button(frame1, text="Update Flight Plan", command=lambda: generate_flight_plan(frequency_entry, callsign_entry, route_var, departure_entry, destination_entry, altitude_entry, squawk_entry, flight_plan_label, direction_label, route_night_label, heading_var, Aircraft_Type, notes_text_box)).grid(row=8, column=0, columnspan=2, pady=10)
+ttk.Button(frame1, text="Update Flight Plan", command=lambda: generate_flight_plan(frequency_entry, callsign_entry, route_var, departure_entry, destination_entry, altitude_entry, squawk_entry, flight_plan_label, direction_label, route_night_label, heading_var, Aircraft_Type, notes_text_box, system_notes_text_box)).grid(row=8, column=0, columnspan=2, pady=10)
 # --- VFR Frame (frame2) ---
 
 def GoToLink():
@@ -315,37 +344,87 @@ def GoToLink():
 
 ttk.Label(frame2, text="VFR Flight Plan Coming Soon!").grid(row=0, column=0, columnspan=2, pady=20)
 
+ttk.Label(frame2, text="\
+    - VFR clearances are are carbon copy of one another! (callsign), \n\
+        Cleared into the Memphis Class Bravo Airspace, Maintain VFR at or below 2500. \n\
+        Departure frequency XXX.XX, squawk XXXX\n\n\
+    - We have to fill out the flight plan editor for VFR aircraft! The most important part \n\
+        is the aircraft type, direction of flight, and the VFR altitude! It goes in as VFR/XXX\n\n\
+    - These clearances differ at different airspaces! Charlies don't require the clearance portion.\n\n\
+    - VFR clearances are very simple to give and therefore can be prioritized in the queue \n\
+        instead of IFR clearances which require a full route check.").grid(row=3, column=0, columnspan=2, pady=20)
+
 my_button = tk.Button(frame2, text="Click me!", command=GoToLink, bg="red", fg="white")
 my_button.grid(row=1, column=0, columnspan=2, pady=10)
 
-# --- Notes Section (Expands) ---
+# --- System Notes Section ---
+system_notes_frame = ttk.Frame(root, padding=5)
+system_notes_frame.pack(fill=tk.X) # pack to the top of the window, or change to pack below notes_frame
 
+tk.Label(system_notes_frame, text="System Notes:").pack()
+
+system_notes_text_box = tk.Text(system_notes_frame, height=4, wrap="word")
+system_notes_text_box.pack(fill=tk.X)
+
+# --- Notes Section (Expands) ---
 notes_frame = ttk.Frame(root, padding=5)
 notes_frame.pack(fill=tk.BOTH, expand=True)
 
-tk.Label(notes_frame, text="Notes:").pack(anchor="w", padx=5, pady=0)
+tk.Label(notes_frame, text="Your Notes:").grid(row=0, column=0, sticky="w", padx=5, pady=0)
 
 notes_text_box = tk.Text(notes_frame, height=6, wrap="word")
-scrollbar = tk.Scrollbar(notes_frame, command=notes_text_box.yview)
+scrollbar = tk.Scrollbar(notes_text_box, command=notes_text_box.yview)
 
-notes_text_box.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=0)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+notes_text_box.grid(row=1, column=0, sticky="nsew", padx=5, pady=0)
 
 notes_text_box.config(yscrollcommand=scrollbar.set)
-notes_text_box.bind("<Key>", on_text_insert) # Change from KeyRelease to Key
 
-# Color selection bar
+# Color selection bar (Moved below notes_text_box)
 color_bar = ttk.Frame(notes_frame)
-color_bar.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
+color_bar.grid(row=2, column=0, columnspan=2, sticky="ew", padx=5, pady=5)
 
-colors = ["black", "red", "blue", "green", "purple", "orange", "white"] # added white
+colors = ["black", "red", "blue", "green", "purple", "orange", "white"]
 
-for color in colors:
+for i, color in enumerate(colors):
     style = ttk.Style()
     style.configure(f"{color}.TButton", background=color)
-    color_button = ttk.Button(color_bar, text="", width=2, style=f"{color}.TButton", command=lambda c=color: change_text_color(c))
-    color_button.pack(side=tk.LEFT, padx=2)
+    color_button = ttk.Button(color_bar, text=color.capitalize(), width=6, style=f"{color}.TButton", command=lambda c=color: change_text_color(c))
+    color_button.grid(row=0, column=i, padx=2)
 
+notes_frame.grid_rowconfigure(1, weight=1)
+notes_frame.grid_columnconfigure(0, weight=1)
+
+# --- Save and Load Notes ---
+def on_closing():
+    """Saves notes, tag ranges, and tag colors before closing the window."""
+    tag_ranges = {}
+    tag_colors = {}
+    for tag in notes_text_box.tag_names():
+        if tag != "sel":
+            ranges = list(notes_text_box.tag_ranges(tag))
+            if ranges:  # Only save tags with ranges
+                tag_ranges[tag] = ranges
+                if tag in tag_colors_dict:
+                    tag_colors[tag] = tag_colors_dict[tag]  # Use stored color name
+    save_notes(notes_text_box.get(1.0, tk.END), tag_ranges, tag_colors)
+    root.destroy()
+
+# Load notes when the application starts
+loaded_notes, loaded_tag_ranges, loaded_tag_colors = load_notes()
+notes_text_box.insert(tk.END, loaded_notes)
+
+# Apply loaded tags (ranges)
+for tag, ranges in loaded_tag_ranges.items():
+    if ranges:
+        for i in range(0, len(ranges), 2):
+            notes_text_box.tag_add(tag, ranges[i], ranges[i + 1])
+
+# Apply loaded tag colors
+for tag, color in loaded_tag_colors.items():
+    if tag in loaded_tag_ranges and loaded_tag_ranges[tag]:  # Check if tag exists and has ranges
+        print(f"Loading tag: {tag}, Color: {color}")  # Add print statement here
+        notes_text_box.tag_configure(tag, foreground=color)
+        tag_colors_dict[tag] = color  # Add the tag back to the dictionary
 # --- Run the application ---
 if __name__ == "__main__":
     root.mainloop()

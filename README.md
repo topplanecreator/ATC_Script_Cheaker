@@ -5,20 +5,20 @@ This Python application, built with Tkinter, generates flight plans for both IFR
 ## Features
 
 -   **IFR Flight Plan Generation:**
-    -      Calculates headings and altitudes based on departure and destination airports.
-    -      Provides route selection from a dropdown menu.
-    -      Supports airline callsign input with automatic airline name lookup.
-    -      Generates flight plan text with all necessary information.
-    -   Displays system notes for potential issues.
+    Calculates headings and altitudes based on departure and destination airports.
+    Provides route selection from a dropdown menu.
+    Supports airline callsign input with automatic airline name lookup.
+    Generates flight plan text with all necessary information.
+    Displays system notes for potential issues.
 -   **VFR Flight Plan Information:**
-    -      Provides information on VFR flight clearances.
-    -   Includes a button that opens a website.
+    Provides information on VFR flight clearances.
+    Includes a button that opens a website.
 -   **Note Taking:**
-    -      Allows users to take notes with text coloring options.
-    -      Saves and loads notes to and from a JSON file.
+    Allows users to take notes with text coloring options.
+    Saves and loads notes to and from a JSON file.
 -   **User-Friendly GUI:**
-    -      Organized layout with tabs for IFR and VFR.
-    -      Clear labels and input fields.
+    Organized layout with tabs for IFR and VFR.
+    Clear labels and input fields.
 
 ## Files
 

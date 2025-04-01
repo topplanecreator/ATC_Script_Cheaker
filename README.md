@@ -42,14 +42,19 @@ This Python application, built with Tkinter, generates flight plans for both IFR
 1.  Make sure you have Python installed.
 2.  Install the required libraries:
 
+    Open your computer's command prompt or terminal and type one of these commands, then press Enter:
+
     ```bash
     pip install pandas
     ```
- or
+
+    Or, if that doesn't work, try:
 
     ```bash
     pip3 install pandas
     ```
+
+    One of them should do the trick!
 
 3.  Place the `airlines.csv`, `airports.csv`, and `routes.csv` files in the same directory as the Python script.
 4.  Run the Python script:

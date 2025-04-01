@@ -1,183 +1,87 @@
 # Flight Plan Generator
 
-## Author: Michael Gledhill
-
-This is a Python-based flight plan generator application built using the Tkinter library for the GUI. The program allows users to input departure and destination airport codes, route, altitude, and other flight parameters to generate a flight plan.
+This Python application, built with Tkinter, generates flight plans for both IFR (Instrument Flight Rules) and VFR (Visual Flight Rules) flights. It reads airline codes, airport data, and route information from CSV files and allows users to input flight details through a graphical user interface (GUI).
 
 ## Features
 
-- **Airport Code Lookups**: The application supports many airline and airport codes for accurate flight plan generation.
-- **Flight Plan Generation**: Based on input parameters like departure, destination, route, and altitude, the app generates a comprehensive flight plan script.
-- **Route Validation**: If the flight is VFR (Visual Flight Rules), the route will automatically default to "ELVIS FOUR" unless specified otherwise.
-- **Altitude Calculations**: The application includes logic for determining flight altitude based on direction and flight rules (VFR/IFR).
-- **User-Friendly Interface**: A simple and intuitive GUI built with Tkinter for easy input and display of flight data.
+-   **IFR Flight Plan Generation:**
+    -      Calculates headings and altitudes based on departure and destination airports.
+    -      Provides route selection from a dropdown menu.
+    -      Supports airline callsign input with automatic airline name lookup.
+    -      Generates flight plan text with all necessary information.
+    -   Displays system notes for potential issues.
+-   **VFR Flight Plan Information:**
+    -      Provides information on VFR flight clearances.
+    -   Includes a button that opens a website.
+-   **Note Taking:**
+    -      Allows users to take notes with text coloring options.
+    -      Saves and loads notes to and from a JSON file.
+-   **User-Friendly GUI:**
+    -      Organized layout with tabs for IFR and VFR.
+    -      Clear labels and input fields.
 
-## Installation
+## Files
 
-### Requirements
-- Python 3.x
-- Tkinter
-- Pandas
+-   `airlines.csv`: Contains airline codes and names.
+-   `airports.csv`: Contains airport data (ICAO codes, names, latitudes, longitudes).
+-   `routes.csv`: Contains route names and fix names.
+-   `user_notes.json`: Stores user notes, tag ranges, and tag colors.
 
-### Clone the Repository
-```sh
-git clone https://github.com/yourusername/flight-plan-generator.git
-```
+## Dependencies
 
-### Install Dependencies
-```sh
-pip install pandas
-```
+-   `tkinter`: For the GUI.
+-   `pandas`: For data manipulation (CSV reading).
+-   `math`: For calculations.
+-   `csv`: For reading CSV files.
+-   `webbrowser`: For opening links.
+-   `json`: For reading and writing json files.
+-   `ttk`: For themed widgets.
+
+## How to Run
+
+1.  Make sure you have Python installed.
+2.  Install the required libraries:
+
+    ```bash
+    pip install pandas
+    ```
+
+3.  Place the `airlines.csv`, `airports.csv`, and `routes.csv` files in the same directory as the Python script.
+4.  Run the Python script:
+
+    ```bash
+    python your_script_name.py
+    ```
 
 ## Usage
-To run the program, execute the Python script:
-```sh
-python flight_plan_generator.py
-```
 
-### Input Parameters
-- **Frequency**: Enter the departure frequency (default is 125.8).
-- **Callsign**: Enter the airline code and flight number (e.g., AAL123).
-- **Departure and Destination**: Enter the ICAO codes of the airports (e.g., KSFO).
-- **Route**: Select the route from available options.
-- **Altitude**: Enter the desired altitude.
-- **VFR/IFR**: Choose whether the flight operates under VFR or IFR.
-- **Squawk**: Enter the squawk code for the flight.
+### IFR Tab
 
-Once all fields are filled, click "Generate Flight Plan" to create the flight plan, which will be displayed in the output section.
+1.  Enter the frequency, callsign, departure ICAO code, destination ICAO code, altitude, and squawk code.
+2.  Select the aircraft type and route from the dropdown menus.
+3.  Click the "Update Flight Plan" button to generate the flight plan.
+4.  The generated flight plan, heading, and direction will be displayed.
+5.  System notes will appear below the flight plan, if any.
 
-### Example
-#### Input:
-```
-Callsign: AAL123
-Departure: KMEM
-Destination: KORD
-Route: ELVIS FOUR
-Altitude: 240
-VFR/IFR: IFR
-Squawk: 3456
-```
-#### Output:
-```
-American Airlines 123 Memphis Ground, cleared to ORD, via ELVIS FOUR,
-then as filed, maintain 5000, expect FL 250 10 minutes after departure,
-departure frequency 125.8, squawk 3456.
-```
+### VFR Tab
 
-## Running on macOS
+1.  Read the VFR flight plan information.
+2.  Click the "Click me!" button to open a link.
 
-If you encounter permission issues when running the app, use the following command:
-```sh
-xattr -c <path/to/application.app>
-```
-For a detailed explanation, watch this [video guide](https://www.youtube.com/watch?v=ZH8_XHzkKD4).
+### Notes Section
 
-If you're not comfortable running this command, you can compile the application yourself following the instructions below.
+1.  Type your notes in the "Your Notes" text box.
+2.  Select text and click a color button to change the text color.
+3.  Notes are automatically saved when the application is closed.
 
----
+## Note about the code.
 
-# Compilation Guides
-
-## macOS Compilation Guide
-
-### Prerequisites
-- **Python 3** (Install via [Homebrew](https://brew.sh/))  
-  ```sh
-  brew install python
-  ```
-- **`pyinstaller`** (For packaging the executable)  
-  ```sh
-  pip install pyinstaller
-  ```
-- **Project Dependencies**  
-  ```sh
-  pip install -r requirements.txt
-  ```
-
-### Compilation Steps
-1. Navigate to your project directory:
-   ```sh
-   cd /path/to/your/project
-   ```
-2. Run PyInstaller to create an executable:
-   ```sh
-   pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
-   ```
-3. (Optional) Add an app icon:
-   ```sh
-   pyinstaller --onefile --windowed --name FlightPlanGenerator --icon=icon.icns main.py
-   ```
-4. Code sign the application (if needed):
-   ```sh
-   codesign --force --deep --sign - dist/FlightPlanGenerator.app
-   ```
-5. Test the executable:
-   ```sh
-   ./dist/FlightPlanGenerator
-   ```
-6. Package for distribution:
-   ```sh
-   hdiutil create -volname "FlightPlanGenerator" -srcfolder "dist/FlightPlanGenerator.app" -ov -format UDZO FlightPlanGenerator.dmg
-   ```
-
----
-
-## Windows Compilation Guide
-
-### Prerequisites
-- **Python 3** (Download from [python.org](https://www.python.org/downloads/))
-- **`pyinstaller`** (For packaging the executable)  
-  ```sh
-  pip install pyinstaller
-  ```
-- **Project Dependencies**  
-  ```sh
-  pip install -r requirements.txt
-  ```
-
-### Compilation Steps
-1. Navigate to your project directory:
-   ```sh
-   cd C:\path\to\your\project
-   ```
-2. Run PyInstaller to create an executable:
-   ```sh
-   pyinstaller --onefile --windowed --name FlightPlanGenerator main.py
-   ```
-3. (Optional) Add an app icon:
-   ```sh
-   pyinstaller --onefile --windowed --name FlightPlanGenerator --icon=icon.ico main.py
-   ```
-4. Test the executable:
-   ```sh
-   dist\FlightPlanGenerator.exe
-   ```
-5. (Optional) Create an installer using Inno Setup or NSIS.
-
-### Troubleshooting
-- If Windows Defender blocks the app, allow it in security settings.
-- If missing DLLs occur, try adding `--add-data` flags to include dependencies.
-
-For further assistance, check the [PyInstaller documentation](https://pyinstaller.org/).
-
----
+The code is designed to be easy to read and understand, with comments explaining each section. Error handling is included to manage potential issues like missing files or invalid input. The GUI is built using Tkinter, providing a simple and intuitive interface.
 
 ## Contributing
-1. Fork the repository.
-2. Create a feature branch:
-   ```sh
-   git checkout -b feature-branch
-   ```
-3. Commit your changes:
-   ```sh
-   git commit -am 'Add new feature'
-   ```
-4. Push to the branch:
-   ```sh
-   git push origin feature-branch
-   ```
-5. Create a new Pull Request.
+
+Feel free to contribute to this project by submitting pull requests or opening issues for bug reports or feature requests.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
 
+This project is open source.

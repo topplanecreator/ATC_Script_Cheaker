@@ -93,6 +93,66 @@ This Python application, built with Tkinter, generates flight plans for both IFR
         python3 KMEM_ATC.py
         ```
 
+# How to Compile (Create an Executable)
+
+If you'd like to run this program without needing to use the command line every time, you can compile it into a standalone application. Here's how:
+
+### For macOS (using Py2App)
+
+1.  **Install Py2App:**
+    * Open your Terminal.
+    * Type this command and press Enter:
+        ```bash
+        pip install py2app
+        ```
+        Or, if that doesn't work, try:
+        ```bash
+        pip3 install py2app
+        ```
+
+2.  **Compile the application:**
+    * In your Terminal, navigate to the folder containing the `setup.py` and `KMEM_ATC.py`. (If you followed the previous download instructions, it's likely in your Downloads folder within a folder named `ATC_Script_Cheaker-main`)
+    * Type this command and press Enter:
+        ```bash
+        python setup.py py2app
+        ```
+        Or, if that doesn't work, try:
+        ```bash
+        python3 setup.py py2app
+        ```
+    * This will create a `dist` folder within the folder. Inside the `dist` folder, you'll find `KMEM_ATC.app`, which is your compiled application. You can move this .app file to your applications folder or desktop to make it easier to access.
+
+### For Windows and other systems (using PyInstaller)
+
+1.  **Install PyInstaller:**
+    * Open your Command Prompt (Windows) or Terminal (macOS/Linux).
+    * Type this command and press Enter:
+        ```bash
+        pip install pyinstaller
+        ```
+        Or, if that doesn't work, try:
+        ```bash
+        pip3 install pyinstaller
+        ```
+
+2.  **Compile the application:**
+    * Navigate to the folder containing your `KMEM_ATC.py` script.
+    * Type this command and press Enter:
+        ```bash
+        pyinstaller --onefile --windowed KMEM_ATC.py --add-data "airlines.csv;." --add-data "airports.csv;." --add-data "routes.csv;." --add-data "user_notes.json;." # add user_notes.json
+        ```
+    * This will create a `dist` folder containing your compiled executable. The `--onefile` option creates a single executable file, and `--windowed` makes it run without a command prompt window. The `--add-data` options include your CSV files and json file in the executable.
+
+3.  **Run the executable:**
+    * Go to the `dist` folder and run the `KMEM_ATC.exe` (Windows) or the executable file for your operating system.
+
+**Important Notes:**
+
+* Compiling can take some time, especially for PyInstaller.
+* If you have issues with finding the files, try using the full file path.
+* Make sure all the CSV files and the JSON file are in the same directory as the python script.
+
+
 ## Usage
 
 ### IFR Tab

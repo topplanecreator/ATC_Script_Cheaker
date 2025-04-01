@@ -39,29 +39,59 @@ This Python application, built with Tkinter, generates flight plans for both IFR
 
 ## How to Run
 
-1.  Make sure you have Python installed.
-2.  Install the required libraries:
+1.  **Make sure you have Python installed.** If you don't, you can download it from the official Python website (python.org). Just follow the instructions on the site to install it.
 
-    Open your computer's command prompt or terminal and type one of these commands, then press Enter:
+2.  **Install the needed library.** This program uses a tool called "pandas" to work with the data files. To install it:
 
-    ```bash
-    pip install pandas
-    ```
+    * **On Windows:**
+        * Open the Command Prompt. You can do this by searching for "cmd" in the Windows search bar.
+        * Type one of these commands and press Enter:
+            ```bash
+            pip install pandas
+            ```
+            Or, if that doesn't work, try:
+            ```bash
+            pip3 install pandas
+            ```
+    * **On macOS or Linux:**
+        * Open the Terminal.
+        * Type one of these commands and press Enter:
+            ```bash
+            pip install pandas
+            ```
+            Or, if that doesn't work, try:
+            ```bash
+            pip3 install pandas
+            ```
+        One of these commands should work!
 
-    Or, if that doesn't work, try:
+3.  **Place the data files in the correct spot.** You need to put the `airlines.csv`, `airports.csv`, and `routes.csv` files in the same folder as the Python script.
 
-    ```bash
-    pip3 install pandas
-    ```
+4.  **Find the folder.**
+    * **If you downloaded a .zip file:**
+        * Unzip (extract) the file and put the extracted folder into your Downloads folder.
+    * **Go to the folder using your command prompt or terminal:**
+        * **On Windows:**
+            * If you placed the folder in your downloads, type this into your command prompt, and press enter.
+                ```bash
+                cd Downloads/ATC_Script_Cheaker-main
+                ```
+        * **On macOS or Linux:**
+            * If you placed the folder in your downloads, type this into your terminal, and press enter.
+                ```bash
+                cd Downloads/ATC_Script_Cheaker-main
+                ```
+            * If you downloaded the file to a different folder, change "Downloads" to the name of the folder where you put it.
 
-    One of them should do the trick!
-
-3.  Place the `airlines.csv`, `airports.csv`, and `routes.csv` files in the same directory as the Python script.
-4.  Run the Python script:
-
-    ```bash
-    python your_script_name.py
-    ```
+5.  **Run the program.**
+    * In the same command prompt or terminal window, type this and press Enter:
+        ```bash
+        python KMEM_ATC.py
+        ```
+    * If that doesn't work, try:
+        ```bash
+        python3 KMEM_ATC.py
+        ```
 
 ## Usage
 

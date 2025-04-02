@@ -12,7 +12,7 @@ This Python application, built with Tkinter, generates flight plans for both IFR
     Displays system notes for potential issues.
 -   **VFR Flight Plan Information:**
     Provides information on VFR flight clearances.
-    Includes a button that opens a website.
+    Includes a button that opens a video.
 -   **Note Taking:**
     Allows users to take notes with text coloring options.
     Saves and loads notes to and from a JSON file.

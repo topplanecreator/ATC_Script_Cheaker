@@ -93,6 +93,39 @@ This Python application, built with Tkinter, generates flight plans for both IFR
         python3 KMEM_ATC.py
         ```
 
+## Usage
+
+### IFR Tab
+
+1.  Enter the frequency, callsign, departure ICAO code, destination ICAO code, altitude, and squawk code.
+2.  Select the aircraft type and route from the dropdown menus.
+3.  Click the "Update Flight Plan" button to generate the flight plan.
+4.  The generated flight plan, heading, and direction will be displayed.
+5.  System notes will appear below the flight plan, if any.
+
+### VFR Tab
+
+1.  Read the VFR flight plan information.
+2.  Click the "Click me!" button to open a link.
+
+### Notes Section
+
+1.  Type your notes in the "Your Notes" text box.
+2.  Select text and click a color button to change the text color.
+3.  Notes are automatically saved when the application is closed.
+
+## Note about the code.
+
+The code is designed to be easy to read and understand, with comments explaining each section. Error handling is included to manage potential issues like missing files or invalid input. The GUI is built using Tkinter, providing a simple and intuitive interface.
+
+## Contributing
+
+Feel free to contribute to this project by submitting pull requests or opening issues for bug reports or feature requests.
+
+## License
+
+This project is open source.
+
 # How to Compile (Create an Executable)
 
 If you'd like to run this program without needing to use the command line every time, you can compile it into a standalone application. Here's how:
@@ -151,37 +184,3 @@ If you'd like to run this program without needing to use the command line every 
 * Compiling can take some time, especially for PyInstaller.
 * If you have issues with finding the files, try using the full file path.
 * Make sure all the CSV files and the JSON file are in the same directory as the python script.
-
-
-## Usage
-
-### IFR Tab
-
-1.  Enter the frequency, callsign, departure ICAO code, destination ICAO code, altitude, and squawk code.
-2.  Select the aircraft type and route from the dropdown menus.
-3.  Click the "Update Flight Plan" button to generate the flight plan.
-4.  The generated flight plan, heading, and direction will be displayed.
-5.  System notes will appear below the flight plan, if any.
-
-### VFR Tab
-
-1.  Read the VFR flight plan information.
-2.  Click the "Click me!" button to open a link.
-
-### Notes Section
-
-1.  Type your notes in the "Your Notes" text box.
-2.  Select text and click a color button to change the text color.
-3.  Notes are automatically saved when the application is closed.
-
-## Note about the code.
-
-The code is designed to be easy to read and understand, with comments explaining each section. Error handling is included to manage potential issues like missing files or invalid input. The GUI is built using Tkinter, providing a simple and intuitive interface.
-
-## Contributing
-
-Feel free to contribute to this project by submitting pull requests or opening issues for bug reports or feature requests.
-
-## License
-
-This project is open source.

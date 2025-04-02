@@ -174,30 +174,25 @@ def change_text_color(color):
     except tk.TclError:
         pass
 
-def save_notes(notes, tag_ranges, tag_colors):
-    serializable_tag_ranges = {}
-    for tag, ranges in tag_ranges.items():
-        serializable_ranges = []
-        for r in ranges:
-            if isinstance(r, str):
-                serializable_ranges.append(r)
-        serializable_tag_ranges[tag] = serializable_ranges
+def save_notes(notes, colors):
+    """Saves notes and character colors."""
     try:
         with open(NOTES_FILENAME, 'w') as file:
-            json.dump({"notes": notes, "tag_ranges": serializable_tag_ranges, "tag_colors": tag_colors}, file)
+            json.dump({"notes": notes, "colors": colors}, file)
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save notes: {e}")
 
 def load_notes():
+    """Loads notes and character colors."""
     try:
         with open(NOTES_FILENAME, 'r') as file:
             data = json.load(file)
-            return data["notes"], data["tag_ranges"], data["tag_colors"]
+            return data["notes"], data["colors"]
     except FileNotFoundError:
-        return "", {}, {}
+        return "", []
     except Exception as e:
         messagebox.showerror("Error", f"Failed to load notes: {e}")
-        return "", {}, {}
+        return "", []
 
 root = tk.Tk()
 root.title("Flight Plan Generator")
@@ -320,28 +315,30 @@ notes_frame.grid_columnconfigure(0, weight=1)
 tag_colors_dict = {}
 
 def on_closing():
-    tag_ranges = {}
-    tag_colors = {}
-    for tag in notes_text_box.tag_names():
-        if tag != "sel":
-            tag_ranges[tag] = list(notes_text_box.tag_ranges(tag))
-            if tag in tag_colors_dict:
-                tag_colors[tag] = tag_colors_dict[tag]
-    save_notes(notes_text_box.get(1.0, tk.END), tag_ranges, tag_colors)
+    """Saves the notes and colors when the window closes."""
+    notes = notes_text_box.get(1.0, tk.END)
+    colors = []
+    for i in range(len(notes)):
+        tags = notes_text_box.tag_names(f"1.0+{i}c")
+        color = "black"  # Default color
+        for tag in tags:
+            if tag != "sel":
+                color = notes_text_box.tag_cget(tag, "foreground")
+                break
+        colors.append(color)
+    save_notes(notes, colors)
     root.destroy()
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 
-loaded_notes, loaded_tag_ranges, loaded_tag_colors = load_notes()
+loaded_notes, loaded_colors = load_notes()
 notes_text_box.insert(tk.END, loaded_notes)
 
-for tag, ranges in loaded_tag_ranges.items():
-    if ranges:
-        for i in range(0, len(ranges), 2):
-            notes_text_box.tag_add(tag, ranges[i], ranges[i+1])
-            if tag in loaded_tag_colors:
-                notes_text_box.tag_configure(tag, foreground=loaded_tag_colors[tag])
-                tag_colors_dict[tag] = loaded_tag_colors[tag]
+if loaded_colors:
+    for i, color in enumerate(loaded_colors):
+        notes_text_box.tag_add(color, f"1.0+{i}c")
+        notes_text_box.tag_configure(color, foreground=color)
+
 
 if __name__ == "__main__":
     root.mainloop()
